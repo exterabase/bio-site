@@ -10,10 +10,10 @@
 
     <!-- ЭКРАН ВХОДА -->
     <div id="splash">
-        <div style="background: var(--surface); padding: 20px; border-radius: 50%;">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="#D0BCFF"><path d="M8 5v14l11-7z"/></svg>
-        </div>
-        <p class="splash-text">TAP TO ENTER</p>
+        <button class="enter-btn" id="enterButton">
+            <span>Enter Space</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+        </button>
     </div>
 
     <!-- КОНТЕНТ -->
@@ -23,21 +23,16 @@
         <div class="header">
             <img src="https://i.ibb.co/67hY1kGZ/lv-0-20260118182643.jpg" class="avatar">
             <h1>Lyzos</h1>
-            <!-- Анимированный текст -->
             <div class="bio-wrapper">
                 <p class="bio-text">Welcome to my space</p>
             </div>
         </div>
 
         <!-- Видео -->
-        <div class="video-container" id="video-wrapper" onclick="replayVideo()">
+        <div class="video-container" id="video-wrapper">
             <video id="bg-video" playsinline>
                 <source src="https://raw.githubusercontent.com/Blackcatonwite/MediaUPLoader/main/MediaUPL/9a374d52e8ae6326.mp4" type="video/mp4">
             </video>
-            <!-- Иконка реплея -->
-            <div class="replay-overlay">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="#fff"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
-            </div>
         </div>
 
         <!-- Музыкальный плеер -->
@@ -58,14 +53,13 @@
             </div>
         </div>
 
-        <!-- Ссылки (В блоке с сегментами) -->
-        <div class="links-wrapper" id="links-list"></div>
+        <!-- Ссылки -->
+        <div class="links-list" id="links-list"></div>
 
     </div>
 
     <script>
-        // === КОНФИГУРАЦИЯ ===
-        
+        // === ДАННЫЕ ===
         const LINKS = [
             { 
                 title: "Telegram", 
@@ -85,7 +79,6 @@
             { 
                 title: "Steam", 
                 url: "https://steamcommunity.com/profiles/76561198755326845/", 
-                // Нормальная иконка стима
                 icon: '<path d="M11.98 1C5.69 1 .51 5.86.02 12.04l6.43 2.66c.55-.37 1.2-.59 1.91-.59.07 0 .13.01.19.01l4.28-6.21C12.64 7.84 12.32 7.8 11.98 7.8c-2.61 0-4.74 2.12-4.74 4.74 0 1.17.42 2.24 1.13 3.05l-.27.38-6.84-2.82C1.59 18.9 6.27 23 11.98 23c6.63 0 12-5.37 12-12S18.61 1 11.98 1zm-4.75 12.91c-.39.02-.78.11-1.15.26l-.25.11 2.68 1.1c.07-.46.26-.9.53-1.26l-1.81-1.48zm2.14 3.74c-1.31 1.31-3.42 1.33-4.76.04-1.33-1.29-1.35-3.38-.04-4.69l2.88 1.19c.13.75.56 1.42 1.19 1.88l.73 1.58z"/>' 
             }
         ];
@@ -105,45 +98,92 @@
             }
         ];
 
-        // === ЛОГИКА ===
-        
-        // Генерация ссылок
-        const linksContainer = document.getElementById('links-list');
-        LINKS.forEach(link => {
-            linksContainer.innerHTML += `
-                <a href="${link.url}" class="link-card" target="_blank">
-                    <svg class="link-icon" viewBox="0 0 24 24">${link.icon}</svg>
-                    <span class="link-title">${link.title}</span>
-                    <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
-                </a>
-            `;
-        });
-
-        // Элементы
-        const splash = document.getElementById('splash');
-        const main = document.getElementById('main');
-        const video = document.getElementById('bg-video');
-        const videoWrapper = document.getElementById('video-wrapper');
-        const audio = new Audio();
-        
-        // Плеер UI
-        const playIcon = document.getElementById('play-icon');
-        const pauseIcon = document.getElementById('pause-icon');
-        const coverEl = document.getElementById('track-cover');
-        const titleEl = document.getElementById('track-title');
-        const artistEl = document.getElementById('track-artist');
-        let currentTrackIdx = 0;
-
-        // Вход на сайт
-        splash.onclick = () => {
-            splash.style.opacity = '0';
-            setTimeout(() => splash.style.display = 'none', 500);
-            main.style.display = 'flex';
+        // === ИНИЦИАЛИЗАЦИЯ (ФИКС БАГОВ) ===
+        document.addEventListener("DOMContentLoaded", () => {
             
-            // Включаем видео (1 раз)
-            video.muted = false;
-            video.play();
-        };
+            // Генерация ссылок
+            const linksContainer = document.getElementById('links-list');
+            LINKS.forEach(link => {
+                linksContainer.innerHTML += `
+                    <a href="${link.url}" class="link-card" target="_blank">
+                        <svg class="link-icon" viewBox="0 0 24 24">${link.icon}</svg>
+                        <span class="link-title">${link.title}</span>
+                        <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+                    </a>
+                `;
+            });
 
-        // Логика видео (Остановка после 1 раза)
-       
+            // Элементы
+            const splash = document.getElementById('splash');
+            const enterBtn = document.getElementById('enterButton');
+            const main = document.getElementById('main');
+            const video = document.getElementById('bg-video');
+            const videoWrapper = document.getElementById('video-wrapper');
+            const audio = new Audio();
+            let currentTrackIdx = 0;
+
+            // Логика кнопки "ENTER" (Исправлено)
+            enterBtn.addEventListener('click', () => {
+                splash.style.opacity = '0';
+                splash.style.visibility = 'hidden';
+                main.style.display = 'flex';
+                
+                // Запуск видео
+                video.muted = false;
+                video.play().catch(e => console.error("Video play error:", e));
+            });
+
+            // Видео логика
+            video.onended = () => {
+                video.pause();
+            };
+
+            videoWrapper.onclick = () => {
+                if (!audio.paused) toggleMusic();
+                video.currentTime = 0;
+                video.play();
+            };
+
+            // Плеер UI
+            const playIcon = document.getElementById('play-icon');
+            const pauseIcon = document.getElementById('pause-icon');
+            const coverEl = document.getElementById('track-cover');
+            const titleEl = document.getElementById('track-title');
+            const artistEl = document.getElementById('track-artist');
+
+            window.loadTrack = (index) => {
+                const track = PLAYLIST[index];
+                audio.src = track.url;
+                coverEl.src = track.cover;
+                titleEl.textContent = track.title;
+                artistEl.textContent = track.artist;
+            };
+
+            window.toggleMusic = () => {
+                if (audio.paused) {
+                    video.pause();
+                    audio.play();
+                    playIcon.style.display = 'none';
+                    pauseIcon.style.display = 'block';
+                } else {
+                    audio.pause();
+                    playIcon.style.display = 'block';
+                    pauseIcon.style.display = 'none';
+                }
+            };
+
+            window.nextTrack = () => {
+                currentTrackIdx = (currentTrackIdx + 1) % PLAYLIST.length;
+                const wasPlaying = !audio.paused;
+                loadTrack(currentTrackIdx);
+                if (wasPlaying) audio.play();
+            };
+
+            audio.onended = nextTrack;
+            
+            // Первая загрузка
+            loadTrack(0);
+        });
+    </script>
+</body>
+</html>
