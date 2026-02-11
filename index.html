@@ -3,37 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bio</title>
+    <title>Bio Link</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="overlay" onclick="startAll()" style="position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.8); display:flex; align-items:center; justify-content:center; cursor:pointer;">
-        <div style="text-align:center;">
-            <div class="play-btn" style="width:80px; height:80px; margin: 0 auto 16px;">
-                <svg viewBox="0 0 24 24" style="width:40px; fill:#000"><path d="M8 5v14l11-7z"/></svg>
-            </div>
-            <p style="font-weight:800; letter-spacing:1px;">TAP TO VIEW</p>
-        </div>
+    <div id="splash" onclick="initPage()">
+        <div class="play-btn" style="width:80px; height:80px;"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        <p style="margin-top:20px; font-weight:800; letter-spacing:1px;">TAP TO ENTER</p>
     </div>
 
-    <div class="container" id="main-content">
+    <div class="bio-container" id="content" style="display:none;">
         <div id="header"></div>
-        <div id="blocks-container"></div>
+        <div id="blocks"></div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>
-        // ВОТ ЭТУ СТРОКУ НУЖНО БУДЕТ ЗАМЕНЯТЬ ЧЕРЕЗ АДМИНКУ
-        const GITHUB_DATA = {"title":"ТВОЙ НИК","description":"ТВОЁ ОПИСАНИЕ","blocks":[]};
-
-        const SVGS = {
-            link: '<svg viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>',
-            telegram: '<svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.139-5.062 3.345-.479.329-.913.489-1.302.481-.428-.008-1.252-.241-1.865-.44-.752-.244-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635.099-.002.321.023.465.14.121.098.155.23.171.324.016.094.036.308.02.476z"/></svg>'
+        // ТВОИ ДАННЫЕ (Эту переменную будет обновлять админка)
+        const CONFIG = {
+            title: "NAME",
+            description: "BIO DESCRIPTION",
+            blocks: []
         };
 
-        function startAll() {
-            document.getElementById('overlay').style.display = 'none';
-            // Запуск всех видео
+        const SVGS = {
+            tg: '<svg class="icon" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.139-5.062 3.345-.479.329-.913.489-1.302.481-.428-.008-1.252-.241-1.865-.44-.752-.244-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635.099-.002.321.023.465.14.121.098.155.23.171.324.016.094.036.308.02.476z"/></svg>',
+            link: '<svg class="icon" viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>'
+        };
+
+        function initPage() {
+            document.getElementById('splash').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+            
+            // Запуск видео со звуком
             document.querySelectorAll('video').forEach(v => {
                 v.muted = false;
                 v.play();
@@ -41,34 +42,42 @@
         }
 
         function render() {
-            const data = JSON.parse(localStorage.getItem('bioDataPro')) || GITHUB_DATA;
-            document.getElementById('header').innerHTML = `<h1>${data.title}</h1><p class="desc">${data.description}</p>`;
+            const data = JSON.parse(localStorage.getItem('bioDataPro')) || CONFIG;
+            document.getElementById('header').innerHTML = `<h1>${data.title}</h1><div class="description">${data.description}</div>`;
             
-            const container = document.getElementById('blocks-container');
+            const list = document.getElementById('blocks');
             data.blocks.forEach(b => {
-                let html = `<div class="block">`;
+                let el = '';
                 if(b.type === 'link') {
-                    html += `<a href="${b.url}" class="btn-link"><div class="icon">${SVGS[b.platform] || SVGS.link}</div><span>${b.name}</span></a>`;
+                    el = `<a href="${b.url}" class="link-card">${SVGS[b.platform] || SVGS.link}<span>${b.name}</span></a>`;
                 } else if(b.type === 'music') {
-                    html += `<div class="player">
-                        <img src="${b.cover || ''}" class="player-img">
+                    el = `<div class="music-player">
+                        <img src="${b.cover}" class="player-cover">
                         <div class="player-info"><div class="player-title">${b.title}</div><div class="player-artist">${b.artist}</div></div>
-                        <button class="play-btn" onclick="const a=this.nextElementSibling; a.paused?a.play():a.pause()">
-                            <svg viewBox="0 0 24 24" style="width:20px"><path d="M8 5v14l11-7z"/></svg>
-                        </button>
-                        <audio src="${b.url}" loop></audio>
+                        <button class="play-btn" onclick="toggleMusic(this, '${b.url}')"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
                     </div>`;
                 } else if(b.type === 'video') {
-                    html += `<div class="video-card"><video src="${b.url}" loop playsinline></video></div>`;
-                } else if(b.type === 'quote') {
-                    html += `<div class="quote"><p class="quote-text">${b.content}</p></div>`;
+                    el = `<div class="video-wrapper"><video src="${b.url}" loop playsinline></video></div>`;
                 } else if(b.type === 'divider') {
-                    html += `<div class="divider"><div class="divider-line"></div><div class="divider-text">${b.text || ''}</div><div class="divider-line"></div></div>`;
+                    el = `<div class="segment"><div class="segment-line"></div><div class="segment-text">${b.text}</div><div class="segment-line"></div></div>`;
+                } else if(b.type === 'quote') {
+                    el = `<div class="quote-card"><div class="quote-text">${b.content}</div></div>`;
                 }
-                html += `</div>`;
-                container.innerHTML += html;
+                list.innerHTML += el;
             });
         }
+
+        let currentAudio = null;
+        function toggleMusic(btn, url) {
+            if(currentAudio && currentAudio.src === url) {
+                currentAudio.paused ? currentAudio.play() : currentAudio.pause();
+            } else {
+                if(currentAudio) currentAudio.pause();
+                currentAudio = new Audio(url);
+                currentAudio.play();
+            }
+        }
+
         render();
     </script>
 </body>

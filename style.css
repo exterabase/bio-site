@@ -1,92 +1,100 @@
 :root {
-  --bg: #0f0e13;
-  --surface: #1c1b21;
-  --surface-bright: #2b2930;
-  --primary: #d0bcff;
-  --on-surface: #e6e1e5;
-  --on-surface-variant: #cac4d0;
-  --outline: #938f99;
+  /* MD3 Dark Palette */
+  --md-sys-color-surface: #121212;
+  --md-sys-color-surface-container: #1e1e1e;
+  --md-sys-color-primary: #D0BCFF;
+  --md-sys-color-on-surface: #E6E1E5;
+  --md-sys-color-on-surface-variant: #CAC4D0;
+  --md-sys-color-outline-variant: #49454F;
+  
+  --radius-full: 1000px;
   --radius-xl: 28px;
   --radius-lg: 20px;
-  --font-apple: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+  --radius-md: 12px;
+  
+  --font-main: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif;
 }
-
-* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 body {
-  background-color: var(--bg);
-  color: var(--on-surface);
-  font-family: var(--font-apple);
-  line-height: 1.5;
+  background-color: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
+  font-family: var(--font-main);
+  margin: 0;
   display: flex;
   justify-content: center;
-  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
 }
 
-.container {
+.bio-container {
   width: 100%;
-  max-width: 500px;
+  max-width: 450px;
   padding: 40px 16px;
 }
 
 /* Typography */
-h1 { font-weight: 800; font-size: 32px; text-align: center; letter-spacing: -0.8px; margin-bottom: 8px; }
-.desc { font-weight: 600; font-size: 16px; text-align: center; color: var(--on-surface-variant); margin-bottom: 32px; }
+h1 { font-weight: 800; font-size: 32px; letter-spacing: -0.5px; text-align: center; margin-bottom: 8px; }
+.description { font-weight: 600; font-size: 16px; color: var(--md-sys-color-on-surface-variant); text-align: center; margin-bottom: 32px; }
 
-/* Blocks */
-.block { margin-bottom: 12px; animation: slideUp 0.5s ease forwards; opacity: 0; }
-@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-/* Link Button */
-.btn-link {
-  background: var(--surface);
-  border: 1px solid rgba(255,255,255,0.05);
+/* MD3 Link Button */
+.link-card {
+  background: var(--md-sys-color-surface-container);
   border-radius: var(--radius-xl);
-  padding: 18px 20px;
+  padding: 16px 20px;
   display: flex;
   align-items: center;
   text-decoration: none;
-  color: #fff;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  color: inherit;
+  margin-bottom: 12px;
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), background 0.2s;
+  border: 1px solid rgba(255,255,255,0.03);
 }
-.btn-link:active { transform: scale(0.97); background: var(--surface-bright); }
-.btn-link span { flex-grow: 1; text-align: center; font-weight: 700; font-size: 16px; }
+.link-card:active { transform: scale(0.97); background: #2a2a2a; }
+.link-card .icon { width: 24px; height: 24px; fill: var(--md-sys-color-primary); margin-right: 16px; flex-shrink: 0; }
+.link-card span { font-weight: 700; font-size: 16px; flex-grow: 1; text-align: center; margin-right: 40px; }
 
-/* Quote */
-.quote {
-  padding: 16px 20px;
-  border-left: 4px solid var(--primary);
-  background: var(--surface);
-  border-radius: 4px var(--radius-lg) var(--radius-lg) 4px;
-}
-.quote-text { font-weight: 600; font-style: italic; color: var(--on-surface); }
-
-/* One-line Music Player */
-.player {
-  background: var(--surface);
-  border-radius: 100px;
-  padding: 8px;
+/* One-line Player */
+.music-player {
+  background: var(--md-sys-color-surface-container);
+  border-radius: var(--radius-xl);
+  padding: 10px;
   display: flex;
   align-items: center;
   gap: 12px;
+  margin-bottom: 12px;
 }
-.player-img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); }
+.player-cover { width: 48px; height: 48px; border-radius: var(--radius-md); object-fit: cover; }
 .player-info { flex-grow: 1; overflow: hidden; }
-.player-title { font-weight: 800; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.player-artist { font-size: 12px; font-weight: 600; opacity: 0.6; }
-.play-btn { width: 40px; height: 40px; border-radius: 50%; background: var(--primary); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.player-title { font-weight: 700; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.player-artist { font-size: 12px; opacity: 0.6; font-weight: 600; }
+.play-btn { 
+  width: 40px; height: 40px; border-radius: var(--radius-full); 
+  background: var(--md-sys-color-primary); border: none; 
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.play-btn svg { width: 20px; fill: #000; }
+
+/* MD3 Segment Divider */
+.segment { display: flex; align-items: center; margin: 24px 0; gap: 16px; }
+.segment-line { height: 1px; flex-grow: 1; background: var(--md-sys-color-outline-variant); }
+.segment-text { font-size: 12px; font-weight: 800; color: var(--md-sys-color-on-surface-variant); text-transform: uppercase; letter-spacing: 1px; }
+
+/* Quote (Minimalist) */
+.quote-card {
+  padding: 16px 20px;
+  background: var(--md-sys-color-surface-container);
+  border-radius: var(--radius-lg);
+  border-left: 4px solid var(--md-sys-color-primary);
+  margin-bottom: 12px;
+}
+.quote-text { font-style: italic; font-weight: 600; font-size: 15px; }
 
 /* Video */
-.video-card { border-radius: var(--radius-lg); overflow: hidden; background: #000; position: relative; }
-.video-card video { width: 100%; display: block; }
+.video-wrapper { border-radius: var(--radius-xl); overflow: hidden; margin-bottom: 12px; background: #000; }
+video { width: 100%; display: block; }
 
-/* Divider Segment */
-.divider { display: flex; align-items: center; gap: 16px; margin: 24px 0; }
-.divider-line { height: 1px; flex-grow: 1; background: var(--outline); opacity: 0.2; }
-.divider-text { font-weight: 800; font-size: 11px; text-transform: uppercase; color: var(--outline); letter-spacing: 1.5px; }
-
-/* SVG Icons */
-.icon { width: 24px; height: 24px; fill: var(--primary); display: flex; flex-shrink: 0; }
-
-/* Lightbox & QR */
-.qr-card { background: #fff; padding: 16px; border-radius: var(--radius-lg); margin: 0 auto 24px; width: fit-content; }
+/* Splash Screen (For Autoplay) */
+#splash {
+  position: fixed; inset: 0; background: #000; z-index: 9999;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  cursor: pointer;
+}
