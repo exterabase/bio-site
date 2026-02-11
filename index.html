@@ -3,58 +3,310 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Моё био</title>
+<title id="page-title">Моё био</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="container" id="content">
-  <h1 id="bio-title">Моё био</h1>
-  <p id="bio-desc">Здесь будут мои ссылки и информация обо мне.</p>
-  <img id="bio-avatar" src="" alt="" style="width:120px;height:120px;border-radius:50%;display:none;margin-bottom:15px;">
-  <div id="blocks"></div>
+<!-- Анимированный фон со звёздами -->
+<div class="stars-container" id="stars"></div>
+
+<!-- Основной контент -->
+<div class="bio-container" id="content">
+  <!-- Аватарка -->
+  <div class="avatar-wrapper" id="avatar-wrapper" style="display:none;">
+    <img id="bio-avatar" src="" alt="Avatar">
+    <div class="avatar-glow"></div>
+  </div>
+
+  <!-- Имя/Заголовок с эффектом печатной машинки -->
+  <h1 class="bio-title" id="bio-title"></h1>
+  
+  <!-- Описание -->
+  <p class="bio-description" id="bio-desc"></p>
+
+  <!-- QR код -->
+  <div class="qr-section" id="qr-section" style="display:none;">
+    <canvas id="qr-canvas"></canvas>
+    <p class="qr-label">Сканируй QR код</p>
+  </div>
+
+  <!-- Блоки контента -->
+  <div class="blocks-container" id="blocks"></div>
 </div>
 
+<!-- Переключатель темы -->
+<div class="theme-switcher" id="theme-switcher">
+  <button class="theme-btn" data-theme="purple">🟣</button>
+  <button class="theme-btn" data-theme="blue">🔵</button>
+  <button class="theme-btn" data-theme="green">🟢</button>
+  <button class="theme-btn" data-theme="sunset">🌅</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
+// Данные из localStorage
 let data = JSON.parse(localStorage.getItem('bioDataPro')) || {
   title: "Моё био",
-  description: "Здесь будут мои ссылки и информация обо мне.",
+  description: "Добро пожаловать на мою страницу!",
   avatar: "",
+  theme: "purple",
+  showQR: false,
   blocks: []
 };
 
-function render() {
-  document.getElementById('bio-title').textContent = data.title;
-  document.getElementById('bio-desc').textContent = data.description;
-
-  const avatar = document.getElementById('bio-avatar');
-  if(data.avatar) {
-    avatar.src = data.avatar;
-    avatar.style.display = 'block';
-  } else {
-    avatar.style.display = 'none';
-  }
-
-  const container = document.getElementById('blocks');
-  container.innerHTML = '';
-
-  data.blocks.forEach(block => {
-    if(block.type === 'text') {
-      const p = document.createElement('p');
-      p.textContent = block.content;
-      container.appendChild(p);
-    } else if(block.type === 'link') {
-      const a = document.createElement('a');
-      a.href = block.url;
-      a.target = "_blank";
-      a.className = `button ${block.platform || 'default'}`;
-      a.innerHTML = (block.icon || '') + ' ' + block.name;
-      container.appendChild(a);
-    }
+// Применение темы
+function applyTheme(theme) {
+  document.body.className = 'theme-' + (theme || data.theme || 'purple');
+  document.querySelectorAll('.theme-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.theme === (theme || data.theme));
   });
 }
 
-render();
+// Генерация звёзд
+function generateStars() {
+  const starsContainer = document.getElementById('stars');
+  const starCount = 100;
+  
+  for(let i = 0; i < starCount; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    star.style.left = Math.random() * 100 + '%';
+    star.style.top = Math.random() * 100 + '%';
+    star.style.animationDelay = Math.random() * 3 + 's';
+    star.style.animationDuration = (Math.random() * 2 + 2) + 's';
+    starsContainer.appendChild(star);
+  }
+}
+
+// Эффект печатной машинки
+function typeWriter(element, text, speed = 50) {
+  let i = 0;
+  element.textContent = '';
+  element.style.opacity = '1';
+  
+  function type() {
+    if (i < text.length) {
+      element.textContent += text.charAt(i);
+      i++;
+      setTimeout(type, speed);
+    }
+  }
+  type();
+}
+
+// Генерация QR кода
+function generateQR() {
+  const qrSection = document.getElementById('qr-section');
+  const canvas = document.getElementById('qr-canvas');
+  
+  if(data.showQR) {
+    qrSection.style.display = 'block';
+    canvas.innerHTML = '';
+    new QRCode(canvas, {
+      text: window.location.href,
+      width: 200,
+      height: 200,
+      colorDark: "#ffffff",
+      colorLight: "#1a1a2e",
+      correctLevel: QRCode.CorrectLevel.H
+    });
+  } else {
+    qrSection.style.display = 'none';
+  }
+}
+
+// Рендер контента
+function render() {
+  // Применяем тему
+  applyTheme(data.theme);
+  
+  // Заголовок страницы
+  document.getElementById('page-title').textContent = data.title;
+  
+  // Аватарка
+  const avatarWrapper = document.getElementById('avatar-wrapper');
+  const avatar = document.getElementById('bio-avatar');
+  if(data.avatar) {
+    avatar.src = data.avatar;
+    avatarWrapper.style.display = 'block';
+    setTimeout(() => avatarWrapper.classList.add('show'), 100);
+  } else {
+    avatarWrapper.style.display = 'none';
+  }
+
+  // Эффект печатной машинки для заголовка
+  const title = document.getElementById('bio-title');
+  setTimeout(() => typeWriter(title, data.title, 80), 300);
+
+  // Описание с задержкой
+  const desc = document.getElementById('bio-desc');
+  desc.textContent = data.description;
+  setTimeout(() => desc.classList.add('show'), 1500);
+
+  // QR код
+  setTimeout(() => generateQR(), 2000);
+
+  // Блоки контента
+  renderBlocks();
+}
+
+// Рендер блоков
+function renderBlocks() {
+  const container = document.getElementById('blocks');
+  container.innerHTML = '';
+
+  data.blocks.forEach((block, index) => {
+    const blockEl = document.createElement('div');
+    blockEl.className = 'block fade-in';
+    blockEl.style.animationDelay = (2 + index * 0.1) + 's';
+
+    switch(block.type) {
+      case 'link':
+        blockEl.innerHTML = `
+          <a href="${block.url}" target="_blank" class="link-btn ${block.platform || 'default'}">
+            ${block.iconType === 'svg' ? getSVGIcon(block.platform) : (block.icon || '🔗')}
+            <span>${block.name}</span>
+          </a>
+        `;
+        break;
+
+      case 'text':
+        blockEl.innerHTML = `<p class="text-block">${block.content}</p>`;
+        break;
+
+      case 'quote':
+        blockEl.innerHTML = `
+          <div class="quote-block">
+            <div class="quote-icon">❝</div>
+            <p class="quote-text">${block.content}</p>
+            ${block.author ? `<p class="quote-author">— ${block.author}</p>` : ''}
+          </div>
+        `;
+        break;
+
+      case 'video':
+        blockEl.innerHTML = `
+          <div class="video-wrapper">
+            <video class="video-player" id="video-${index}" src="${block.url}" ${block.autoplay ? 'autoplay muted loop' : ''} playsinline></video>
+            ${!block.autoplay ? `
+              <div class="video-controls" onclick="toggleVideo('video-${index}')">
+                <div class="play-btn">▶</div>
+              </div>
+            ` : ''}
+          </div>
+        `;
+        break;
+
+      case 'image':
+        blockEl.innerHTML = `
+          <div class="image-wrapper" onclick="openLightbox('${block.url}')">
+            <img src="${block.url}" alt="${block.caption || 'Image'}">
+            ${block.caption ? `<p class="image-caption">${block.caption}</p>` : ''}
+          </div>
+        `;
+        break;
+
+      case 'counter':
+        blockEl.innerHTML = `
+          <div class="counter-block">
+            <div class="counter-icon">${block.icon || '📊'}</div>
+            <div class="counter-content">
+              <div class="counter-value">${block.value}</div>
+              <div class="counter-label">${block.label}</div>
+            </div>
+          </div>
+        `;
+        break;
+
+      case 'music':
+        if(block.platform === 'spotify') {
+          blockEl.innerHTML = `
+            <div class="music-block">
+              <iframe src="https://open.spotify.com/embed/${block.embedId}" width="100%" height="152" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+            </div>
+          `;
+        } else if(block.platform === 'soundcloud') {
+          blockEl.innerHTML = `
+            <div class="music-block">
+              <iframe width="100%" height="166" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=${encodeURIComponent(block.url)}&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false"></iframe>
+            </div>
+          `;
+        }
+        break;
+
+      case 'divider':
+        blockEl.innerHTML = `<div class="divider-block"><span>${block.text || ''}</span></div>`;
+        break;
+    }
+
+    container.appendChild(blockEl);
+  });
+}
+
+// Управление видео
+function toggleVideo(id) {
+  const video = document.getElementById(id);
+  const wrapper = video.parentElement;
+  const controls = wrapper.querySelector('.video-controls');
+  
+  if(video.paused) {
+    video.play();
+    controls.classList.add('playing');
+  } else {
+    video.pause();
+    controls.classList.remove('playing');
+  }
+}
+
+// Lightbox для изображений
+function openLightbox(url) {
+  const lightbox = document.createElement('div');
+  lightbox.className = 'lightbox';
+  lightbox.innerHTML = `
+    <div class="lightbox-content">
+      <img src="${url}">
+      <button class="lightbox-close" onclick="this.parentElement.parentElement.remove()">✕</button>
+    </div>
+  `;
+  lightbox.onclick = (e) => {
+    if(e.target === lightbox) lightbox.remove();
+  };
+  document.body.appendChild(lightbox);
+  setTimeout(() => lightbox.classList.add('show'), 10);
+}
+
+// SVG иконки соцсетей
+function getSVGIcon(platform) {
+  const icons = {
+    telegram: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.139-5.062 3.345-.479.329-.913.489-1.302.481-.428-.008-1.252-.241-1.865-.44-.752-.244-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635.099-.002.321.023.465.14.121.098.155.23.171.324.016.094.036.308.02.476z"/></svg>',
+    discord: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>',
+    instagram: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>',
+    youtube: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>',
+    twitter: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>',
+    github: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>',
+    tiktok: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>',
+    vk: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.684 0H8.316C1.592 0 0 1.592 0 8.316v7.368C0 22.408 1.592 24 8.316 24h7.368C22.408 24 24 22.408 24 15.684V8.316C24 1.592 22.391 0 15.684 0zm3.692 17.123h-1.744c-.66 0-.864-.525-2.05-1.727-1.033-1-1.49-1.135-1.744-1.135-.356 0-.458.102-.458.593v1.575c0 .424-.135.678-1.253.678-1.846 0-3.896-1.118-5.335-3.202C4.624 10.857 4.03 8.57 4.03 8.096c0-.254.102-.491.593-.491h1.744c.44 0 .61.203.78.677.863 2.49 2.303 4.675 2.896 4.675.22 0 .322-.102.322-.66V9.721c-.068-1.186-.695-1.287-.695-1.71 0-.204.17-.407.44-.407h2.744c.373 0 .508.203.508.643v3.473c0 .372.17.508.271.508.22 0 .407-.136.813-.542 1.27-1.422 2.168-3.61 2.168-3.61.119-.254.322-.491.763-.491h1.744c.525 0 .644.27.525.643-.22 1.017-2.354 4.031-2.354 4.031-.186.305-.254.44 0 .78.186.254.796.779 1.203 1.253.745.847 1.32 1.558 1.473 2.05.17.49-.085.744-.576.744z"/></svg>',
+    whatsapp: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>',
+    default: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>'
+  };
+  return `<span class="social-icon">${icons[platform] || icons.default}</span>`;
+}
+
+// Переключение темы
+document.querySelectorAll('.theme-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    data.theme = btn.dataset.theme;
+    localStorage.setItem('bioDataPro', JSON.stringify(data));
+    applyTheme(data.theme);
+  });
+});
+
+// Инициализация
+window.addEventListener('DOMContentLoaded', () => {
+  generateStars();
+  render();
+});
 </script>
 
 </body>
