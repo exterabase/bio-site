@@ -3,15 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Bio Pro</title>
+    <title>Lyzos Bio</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- ЭКРАН ВХОДА (Чтобы работал звук) -->
+    <!-- ЭКРАН ВХОДА -->
     <div id="splash">
-        <svg class="tap-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
-        <p style="font-weight: 800; letter-spacing: 2px; font-size: 14px; color: #666;">TAP TO ENTER</p>
+        <div style="background: var(--surface); padding: 20px; border-radius: 50%;">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="#D0BCFF"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <p class="splash-text">TAP TO ENTER</p>
     </div>
 
     <!-- КОНТЕНТ -->
@@ -19,56 +21,50 @@
         
         <!-- Шапка -->
         <div class="header">
-            <!-- Аватар берем из обложки трека, т.к. отдельного нет -->
-            <img src="https://i1.sndcdn.com/artworks-0DxCccgWqI4m48tz-zsnzYg-t500x500.png" class="avatar">
+            <img src="https://i.ibb.co/67hY1kGZ/lv-0-20260118182643.jpg" class="avatar">
             <h1>Lyzos</h1>
-            <p class="bio-text">Welcome to my space</p>
+            <!-- Анимированный текст -->
+            <div class="bio-wrapper">
+                <p class="bio-text">Welcome to my space</p>
+            </div>
         </div>
 
-        <!-- Разделитель -->
-        <div class="segment"><div class="segment-line"></div><div class="segment-text">MEDIA</div><div class="segment-line"></div></div>
-
         <!-- Видео -->
-        <div class="video-container">
-            <video id="bg-video" loop playsinline>
+        <div class="video-container" id="video-wrapper" onclick="replayVideo()">
+            <video id="bg-video" playsinline>
                 <source src="https://raw.githubusercontent.com/Blackcatonwite/MediaUPLoader/main/MediaUPL/9a374d52e8ae6326.mp4" type="video/mp4">
             </video>
+            <!-- Иконка реплея -->
+            <div class="replay-overlay">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="#fff"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
+            </div>
         </div>
 
         <!-- Музыкальный плеер -->
         <div class="player" id="player-ui">
-            <div class="cover-wrapper">
-                <img id="track-cover" src="" class="player-cover">
-            </div>
+            <img id="track-cover" src="" class="player-cover">
             <div class="track-info">
-                <div id="track-title" class="track-title">Loading...</div>
-                <div id="track-artist" class="track-artist">MUSIC</div>
+                <div id="track-title" class="track-title">...</div>
+                <div id="track-artist" class="track-artist">...</div>
             </div>
             <div class="controls">
-                <!-- Кнопка Play/Pause -->
-                <button class="ctrl-btn play-btn-main" onclick="togglePlay()">
-                    <svg id="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                    <svg id="pause-icon" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                <button class="ctrl-btn play-btn-main" onclick="toggleMusic()">
+                    <svg id="play-icon" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                    <svg id="pause-icon" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
                 </button>
-                <!-- Кнопка Далее -->
                 <button class="ctrl-btn" onclick="nextTrack()">
-                    <svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
                 </button>
             </div>
         </div>
 
-        <!-- Разделитель -->
-        <div class="segment"><div class="segment-line"></div><div class="segment-text">SOCIALS</div><div class="segment-line"></div></div>
-
-        <!-- Ссылки (Генерируются JS ниже) -->
-        <div id="links-list"></div>
+        <!-- Ссылки (В блоке с сегментами) -->
+        <div class="links-wrapper" id="links-list"></div>
 
     </div>
 
     <script>
-        /* =========================================
-           КОНФИГУРАЦИЯ (ВСЕ НАСТРОЙКИ ЗДЕСЬ)
-           ========================================= */
+        // === КОНФИГУРАЦИЯ ===
         
         const LINKS = [
             { 
@@ -89,104 +85,65 @@
             { 
                 title: "Steam", 
                 url: "https://steamcommunity.com/profiles/76561198755326845/", 
-                icon: '<path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.065 0 .129.006.193.01l4.28-6.208C12.636 6.843 12.316 6.8 11.979 6.8c-2.614 0-4.737 2.122-4.737 4.736 0 1.168.423 2.235 1.126 3.05l-.265.385-6.837-2.825A11.942 11.942 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 11.979 0zM7.226 13.913c-.394.02-.782.106-1.149.262l-.25.105 2.68 1.107c.07-.468.256-.9.532-1.267l-1.813-1.474zm2.144 3.737c-1.314 1.313-3.424 1.332-4.757.04-1.334-1.291-1.353-3.38-.04-4.693l2.88 1.19c.125.755.56 1.42 1.19 1.88l.727 1.583z"/>' 
+                // Нормальная иконка стима
+                icon: '<path d="M11.98 1C5.69 1 .51 5.86.02 12.04l6.43 2.66c.55-.37 1.2-.59 1.91-.59.07 0 .13.01.19.01l4.28-6.21C12.64 7.84 12.32 7.8 11.98 7.8c-2.61 0-4.74 2.12-4.74 4.74 0 1.17.42 2.24 1.13 3.05l-.27.38-6.84-2.82C1.59 18.9 6.27 23 11.98 23c6.63 0 12-5.37 12-12S18.61 1 11.98 1zm-4.75 12.91c-.39.02-.78.11-1.15.26l-.25.11 2.68 1.1c.07-.46.26-.9.53-1.26l-1.81-1.48zm2.14 3.74c-1.31 1.31-3.42 1.33-4.76.04-1.33-1.29-1.35-3.38-.04-4.69l2.88 1.19c.13.75.56 1.42 1.19 1.88l.73 1.58z"/>' 
             }
         ];
 
-        // ТВОЯ МУЗЫКА
         const PLAYLIST = [
             {
-                title: "Track 1",
-                artist: "Artist 1",
-                // Используем твои ссылки как есть
+                title: "Юра Юра",
+                artist: "CUPSIZE",
                 url: "https://sefon.pro/api/mp3_download/direct/1853726/3vUCAFbjvI79EfjR5mPkbY3lT5ANVKvqnh9KQPw3vyDZp9XJsmsd8u8VSgJyMm_SxCagZsbi_DhWlCpgLRGjF_ckvL7nVcwcr2QtZV3SOBbPR016sseaxi_HK5ci6KtCq_A_cHXA9rqnyqmNRXmjP9HmjBvKZ_FAwlpflsMB/",
                 cover: "https://i1.sndcdn.com/artworks-0DxCccgWqI4m48tz-zsnzYg-t500x500.png"
             },
             {
-                title: "Track 2",
-                artist: "Artist 2",
+                title: "Мальчик Кис Кис",
+                artist: "Lyzos's Choice",
                 url: "https://sefon.pro/api/mp3_download/direct/574226/3vUCAF5F1ib8kcqc_JYAGuMJxU3OW4__P6Qp0OsvflnExcaivO2J-6z-Ol15LC_jMlKwWQYw1Ee7O2c9XiKRCXUPqLYMEuBGDF0_Spza54I1zDbRI9tlwXP3t60E22qw0ffiJnGiew9INeFV88o97sE1KZkBFlL5lHiEvhI/",
                 cover: "https://i1.sndcdn.com/artworks-000597047234-u78eo2-t500x500.jpg"
             }
         ];
 
-        /* =========================================
-           ЛОГИКА САЙТА
-           ========================================= */
+        // === ЛОГИКА ===
         
-        // Рендер ссылок
+        // Генерация ссылок
         const linksContainer = document.getElementById('links-list');
         LINKS.forEach(link => {
             linksContainer.innerHTML += `
                 <a href="${link.url}" class="link-card" target="_blank">
                     <svg class="link-icon" viewBox="0 0 24 24">${link.icon}</svg>
                     <span class="link-title">${link.title}</span>
+                    <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
                 </a>
             `;
         });
 
-        // Видео и Вход
+        // Элементы
         const splash = document.getElementById('splash');
         const main = document.getElementById('main');
         const video = document.getElementById('bg-video');
-
-        splash.onclick = () => {
-            splash.style.opacity = '0';
-            setTimeout(() => splash.style.display = 'none', 500);
-            main.style.display = 'flex';
-            
-            // Запуск видео со звуком
-            video.muted = false;
-            video.play().catch(e => console.log("Video error:", e));
-        };
-
-        // Логика плеера
-        let currentTrackIdx = 0;
+        const videoWrapper = document.getElementById('video-wrapper');
         const audio = new Audio();
-        const playerUI = document.getElementById('player-ui');
+        
+        // Плеер UI
         const playIcon = document.getElementById('play-icon');
         const pauseIcon = document.getElementById('pause-icon');
         const coverEl = document.getElementById('track-cover');
         const titleEl = document.getElementById('track-title');
         const artistEl = document.getElementById('track-artist');
+        let currentTrackIdx = 0;
 
-        function loadTrack(index) {
-            const track = PLAYLIST[index];
-            audio.src = track.url;
-            coverEl.src = track.cover;
-            titleEl.textContent = track.title;
-            artistEl.textContent = track.artist;
-        }
+        // Вход на сайт
+        splash.onclick = () => {
+            splash.style.opacity = '0';
+            setTimeout(() => splash.style.display = 'none', 500);
+            main.style.display = 'flex';
+            
+            // Включаем видео (1 раз)
+            video.muted = false;
+            video.play();
+        };
 
-        function togglePlay() {
-            if (audio.paused) {
-                audio.play();
-                playerUI.classList.add('playing');
-                playIcon.style.display = 'none';
-                pauseIcon.style.display = 'block';
-            } else {
-                audio.pause();
-                playerUI.classList.remove('playing');
-                playIcon.style.display = 'block';
-                pauseIcon.style.display = 'none';
-            }
-        }
-
-        function nextTrack() {
-            currentTrackIdx = (currentTrackIdx + 1) % PLAYLIST.length;
-            const wasPlaying = !audio.paused;
-            loadTrack(currentTrackIdx);
-            if (wasPlaying) {
-                audio.play();
-            }
-        }
-
-        // Автопереключение
-        audio.onended = nextTrack;
-
-        // Инициализация первого трека
-        loadTrack(0);
-
-    </script>
-</body>
-</html>
+        // Логика видео (Остановка после 1 раза)
+       
