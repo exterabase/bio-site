@@ -3,16 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Админка - InstallerX Bio</title>
+<title>Админка био Pro</title>
 <link rel="stylesheet" href="style.css">
 </head>
-<body class="theme-purple">
-
-<div class="stars-container" id="stars"></div>
+<body>
 
 <div class="admin-container">
   <div class="admin-header">
-    <h1>⚙️ Админка Bio Pro</h1>
+    <h1>⚙️ Админка био Pro</h1>
     <p>Управляй своей страницей</p>
     <a href="index.html" class="preview-link" target="_blank">👁️ Предпросмотр</a>
   </div>
@@ -42,25 +40,6 @@
     </div>
 
     <button class="btn" onclick="saveMain()">💾 Сохранить основное</button>
-  </div>
-
-  <!-- ВЫБОР ТЕМЫ -->
-  <div class="section">
-    <h2>🎨 Цветовая тема</h2>
-    <div class="color-options">
-      <div class="color-option" data-theme="purple" onclick="selectTheme('purple')" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-        Фиолетовая
-      </div>
-      <div class="color-option" data-theme="blue" onclick="selectTheme('blue')" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
-        Синяя
-      </div>
-      <div class="color-option" data-theme="green" onclick="selectTheme('green')" style="background: linear-gradient(135deg, #0ba360 0%, #3cba92 100%);">
-        Зелёная
-      </div>
-      <div class="color-option" data-theme="sunset" onclick="selectTheme('sunset')" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
-        Закат
-      </div>
-    </div>
   </div>
 
   <!-- ДОБАВЛЕНИЕ БЛОКОВ -->
@@ -144,6 +123,7 @@
       <div class="form-group">
         <label>URL видео</label>
         <input type="url" id="video-url" placeholder="https://example.com/video.mp4">
+        <small>Поддерживаются форматы: MP4, WebM, OGG</small>
       </div>
       <div class="checkbox-group">
         <input type="checkbox" id="video-autoplay">
@@ -183,21 +163,35 @@
     <div id="form-music" class="block-form" style="display:none;">
       <div class="form-group">
         <label>Платформа</label>
-        <select id="music-platform">
+        <select id="music-platform" onchange="updateMusicForm()">
           <option value="spotify">Spotify</option>
           <option value="soundcloud">SoundCloud</option>
+          <option value="custom">Кастомный плеер</option>
         </select>
       </div>
       <div class="form-group" id="spotify-input">
         <label>Spotify Embed ID</label>
         <input type="text" id="music-embedId" placeholder="track/2TpxZ7JUBn3uw46aR7qd6V">
-        <small style="color: var(--text-secondary); display: block; margin-top: 5px;">
-          Найди трек на Spotify → Поделиться → Скопировать ссылку на трек → Используй ID после /track/
-        </small>
+        <small>Найди трек на Spotify → Поделиться → Скопировать ссылку на трек → Используй ID после /track/</small>
       </div>
       <div class="form-group" id="soundcloud-input" style="display:none;">
         <label>SoundCloud URL</label>
-        <input type="url" id="music-url" placeholder="https://soundcloud.com/artist/track">
+        <input type="url" id="music-soundcloud-url" placeholder="https://soundcloud.com/artist/track">
+      </div>
+      <div id="custom-audio-inputs" style="display:none;">
+        <div class="form-group">
+          <label>URL аудио файла</label>
+          <input type="url" id="music-url" placeholder="https://example.com/audio.mp3">
+          <small>Поддерживаются форматы: MP3, WAV, OGG</small>
+        </div>
+        <div class="form-group">
+          <label>Название трека</label>
+          <input type="text" id="music-title" placeholder="Название песни">
+        </div>
+        <div class="form-group">
+          <label>Исполнитель (необязательно)</label>
+          <input type="text" id="music-artist" placeholder="Имя исполнителя">
+        </div>
       </div>
     </div>
 
@@ -215,7 +209,7 @@
   <!-- СПИСОК БЛОКОВ -->
   <div class="section">
     <h2>📋 Блоки на странице</h2>
-    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 15px;">
+    <p style="color: var(--md-sys-color-on-surface-variant); font-size: 14px; margin-bottom: 15px;">
       Перетаскивай блоки для изменения порядка
     </p>
     <div id="blocksList"></div>
@@ -238,30 +232,13 @@
 // Данные
 let data = JSON.parse(localStorage.getItem('bioDataPro')) || {
   title: "Моё био",
-  description: "Добро пожаложать на мою страницу!",
+  description: "Добро пожаловать на мою страницу!",
   avatar: "",
-  theme: "purple",
   showQR: false,
   blocks: []
 };
 
-let editingIndex = -1; // Индекс редактируемого блока
-
-// Генерация звёзд
-function generateStars() {
-  const starsContainer = document.getElementById('stars');
-  const starCount = 100;
-  
-  for(let i = 0; i < starCount; i++) {
-    const star = document.createElement('div');
-    star.className = 'star';
-    star.style.left = Math.random() * 100 + '%';
-    star.style.top = Math.random() * 100 + '%';
-    star.style.animationDelay = Math.random() * 3 + 's';
-    star.style.animationDuration = (Math.random() * 2 + 2) + 's';
-    starsContainer.appendChild(star);
-  }
-}
+let editingIndex = -1;
 
 // Загрузка данных
 function loadData() {
@@ -270,7 +247,6 @@ function loadData() {
   document.getElementById('avatar').value = data.avatar || '';
   document.getElementById('showQR').checked = data.showQR || false;
   
-  selectTheme(data.theme || 'purple');
   renderBlocks();
 }
 
@@ -285,44 +261,31 @@ function saveMain() {
   showAlert('Основные настройки сохранены!', 'success');
 }
 
-// Выбор темы
-function selectTheme(theme) {
-  data.theme = theme;
-  document.body.className = 'theme-' + theme;
-  localStorage.setItem('bioDataPro', JSON.stringify(data));
-  
-  document.querySelectorAll('.color-option').forEach(opt => {
-    opt.classList.toggle('active', opt.dataset.theme === theme);
-  });
-}
-
 // Обновление формы блока
 function updateBlockForm() {
   const type = document.getElementById('blockType').value;
   
-  // Скрываем все формы
   document.querySelectorAll('.block-form').forEach(form => form.style.display = 'none');
   
-  // Показываем нужную
   const formId = 'form-' + type;
   const form = document.getElementById(formId);
   if(form) form.style.display = 'block';
   
-  // Специальная логика для ссылок
   if(type === 'link') {
     document.getElementById('link-iconType').addEventListener('change', function() {
       const emojiInput = document.getElementById('emoji-input');
       emojiInput.style.display = this.value === 'emoji' ? 'block' : 'none';
     });
   }
+}
+
+// Обновление формы музыки
+function updateMusicForm() {
+  const platform = document.getElementById('music-platform').value;
   
-  // Специальная логика для музыки
-  if(type === 'music') {
-    document.getElementById('music-platform').addEventListener('change', function() {
-      document.getElementById('spotify-input').style.display = this.value === 'spotify' ? 'block' : 'none';
-      document.getElementById('soundcloud-input').style.display = this.value === 'soundcloud' ? 'block' : 'none';
-    });
-  }
+  document.getElementById('spotify-input').style.display = platform === 'spotify' ? 'block' : 'none';
+  document.getElementById('soundcloud-input').style.display = platform === 'soundcloud' ? 'block' : 'none';
+  document.getElementById('custom-audio-inputs').style.display = platform === 'custom' ? 'block' : 'none';
 }
 
 // Добавление блока
@@ -395,10 +358,21 @@ function addBlock() {
         const embedId = document.getElementById('music-embedId').value.trim();
         if(!embedId) return showAlert('Введи Spotify Embed ID!', 'error');
         block.embedId = embedId;
-      } else {
-        const musicUrl = document.getElementById('music-url').value.trim();
+      } else if(musicPlatform === 'soundcloud') {
+        const musicUrl = document.getElementById('music-soundcloud-url').value.trim();
         if(!musicUrl) return showAlert('Введи SoundCloud URL!', 'error');
         block.url = musicUrl;
+      } else if(musicPlatform === 'custom') {
+        const musicUrl = document.getElementById('music-url').value.trim();
+        const musicTitle = document.getElementById('music-title').value.trim();
+        const musicArtist = document.getElementById('music-artist').value.trim();
+        
+        if(!musicUrl) return showAlert('Введи URL аудио файла!', 'error');
+        if(!musicTitle) return showAlert('Введи название трека!', 'error');
+        
+        block.url = musicUrl;
+        block.title = musicTitle;
+        if(musicArtist) block.artist = musicArtist;
       }
       break;
 
@@ -437,7 +411,10 @@ function clearForm() {
   document.getElementById('counter-value').value = '';
   document.getElementById('counter-icon').value = '';
   document.getElementById('music-embedId').value = '';
+  document.getElementById('music-soundcloud-url').value = '';
   document.getElementById('music-url').value = '';
+  document.getElementById('music-title').value = '';
+  document.getElementById('music-artist').value = '';
   document.getElementById('divider-text').value = '';
 }
 
@@ -480,11 +457,11 @@ function renderBlocks() {
         break;
       case 'video':
         typeLabel = '🎥 Видео';
-        content = block.url;
+        content = block.url.substring(0, 50) + '...';
         break;
       case 'image':
         typeLabel = '🖼️ Изображение';
-        content = block.caption || block.url;
+        content = block.caption || block.url.substring(0, 50) + '...';
         break;
       case 'counter':
         typeLabel = '📊 Счётчик';
@@ -492,7 +469,9 @@ function renderBlocks() {
         break;
       case 'music':
         typeLabel = '🎵 Музыка';
-        content = block.platform === 'spotify' ? 'Spotify' : 'SoundCloud';
+        if(block.platform === 'spotify') content = 'Spotify';
+        else if(block.platform === 'soundcloud') content = 'SoundCloud';
+        else content = block.title || 'Кастомный плеер';
         break;
       case 'divider':
         typeLabel = '➖ Разделитель';
@@ -512,7 +491,6 @@ function renderBlocks() {
       </div>
     `;
 
-    // Drag and drop
     item.addEventListener('dragstart', handleDragStart);
     item.addEventListener('dragover', handleDragOver);
     item.addEventListener('drop', handleDrop);
@@ -622,7 +600,6 @@ function resetData() {
     title: "Моё био",
     description: "Добро пожаловать на мою страницу!",
     avatar: "",
-    theme: "purple",
     showQR: false,
     blocks: []
   };
@@ -651,18 +628,10 @@ function showAlert(message, type = 'success') {
 
 // Инициализация
 window.addEventListener('DOMContentLoaded', () => {
-  generateStars();
   loadData();
   updateBlockForm();
 });
 </script>
-
-<style>
-@keyframes fadeOut {
-  from { opacity: 1; transform: translateY(0); }
-  to { opacity: 0; transform: translateY(-20px); }
-}
-</style>
 
 </body>
 </html>
