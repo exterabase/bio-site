@@ -1,0 +1,107 @@
+/* ------------------------------- */
+/* Общие стили */
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f5e1c2; /* песочный фон */
+  color: #3e2723; /* темно-кофейный текст */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.container {
+  width: 95%;
+  max-width: 500px;
+  margin: 20px auto;
+}
+
+h1, h2 {
+  margin: 10px 0;
+  text-align: center;
+}
+
+p {
+  text-align: center;
+  color: #5d4037;
+}
+
+/* ------------------------------- */
+/* Кнопки */
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+  padding: 12px;
+  border-radius: 10px;
+  margin: 8px 0;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+  transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+}
+
+.button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+}
+
+/* Градиенты по умолчанию */
+.button.default { background: linear-gradient(45deg, #8d6e63, #bcaaa4); }
+.button.instagram { background: linear-gradient(45deg, #f58529, #dd2a7b, #8134af); }
+.button.telegram { background: linear-gradient(45deg, #0088cc, #00bfff); }
+.button.twitter { background: linear-gradient(45deg, #1da1f2, #0d8ddb); }
+.button.discord { background: linear-gradient(45deg, #7289da, #99aab5); }
+
+/* ------------------------------- */
+/* Админка */
+input, select, textarea {
+  width: 100%;
+  margin: 5px 0 15px 0;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #bcaaa4;
+  box-sizing: border-box;
+}
+
+button.save-btn {
+  background: #6d4c41;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button.save-btn:hover {
+  background: #5d4037;
+}
+
+.card {
+  background: #d7ccc8;
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.delete-btn {
+  background: #b71c1c;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  background: #7f0000;
+}

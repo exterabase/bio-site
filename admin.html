@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Админка био Pro</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+  <h1>Админка Pro</h1>
+
+  <h2>Главное</h2>
+  <input type="text" id="title" placeholder="Название страницы">
+  <textarea id="description" rows="2" placeholder="Описание страницы"></textarea>
+  <input type="url" id="avatar" placeholder="URL аватара">
+  <button class="save-btn" onclick="saveMain()">Сохранить</button>
+
+  <h2>Добавить блок</h2>
+  <select id="blockType">
+    <option value="link">Ссылка</option>
+    <option value="text">Текст</option>
+  </select>
+  <input type="text" id="blockName" placeholder="Название / текст">
+  <input type="url" id="blockUrl" placeholder="URL (для ссылки)">
+  <select id="blockPlatform">
+    <option value="default">Default</option>
+    <option value="instagram">Instagram</option>
+    <option value="telegram">Telegram</option>
+    <option value="twitter">Twitter</option>
+    <option value="discord">Discord</option>
+  </select>
+  <input type="text" id="blockIcon" placeholder="Иконка (emoji или HTML)">
+  <button class="save-btn" onclick="addBlock()">Добавить блок</button>
+
+  <h2>Существующие блоки</h2>
+  <div id="blocksList"></div>
+</div>
+
+<script>
+let data = JSON.parse(localStorage.getItem('bioDataPro')) || {
+  title: "Моё био",
+  description: "Здесь будут мои ссылки и информация обо мне.",
+  avatar: "",
+  blocks: []
+};
+
+document.getElementById('title').value = data.title;
+document.getElementById('description').value = data.description;
+document.getElementById('avatar').value = data.avatar || '';
+
+function saveMain() {
+  data.title = document.getElementById('title').value;
+  data.description = document.getElementById('description').value;
+  data.avatar = document.getElementById('avatar').value;
+  localStorage.setItem('bioDataPro', JSON.stringify(data));
+  alert("Сохранено!");
+}
+
+function addBlock() {
+  const type = document.getElementById('blockType').value;
+  const name = document.getElementById('blockName').value.trim();
+  const url = document.getElementById('blockUrl').value.trim();
+  const platform = document.getElementById('blockPlatform').value;
+  const icon = document.getElementById('blockIcon').value;
+
+  if(type === 'link' && !name) return alert("Введите название ссылки");
+  if(type === 'link' && !url) return alert("Введите URL ссылки");
+  if(type === 'text' && !name) return alert("Введите текст");
+
+  const block = {type};
+  if(type === 'link') {
+    block.name = name;
+    block.url = url;
+    block.platform = platform;
+    block.icon = icon;
+  } else {
+    block.content = name;
+  }
+
+  data.blocks.push(block);
+  localStorage.setItem('bioDataPro', JSON.stringify(data));
+  renderBlocks();
+  document.getElementById('blockName').value = '';
+  document.getElementById('blockUrl').value = '';
+  document.getElementById('blockIcon').value = '';
+}
+
+function renderBlocks() {
+  const container = document.getElementById('blocksList');
+  container.innerHTML = '';
+  data.blocks.forEach((block, i) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `${block.type==='link'?'🔗':'📝'} ${block.type==='link'?block.name:block.content}
+      <button class="delete-btn" onclick="deleteBlock(${i})">X</button>`;
+    container.appendChild(card);
+  });
+}
+
+function deleteBlock(i) {
+  if(confirm('Удалить этот блок?')) {
+    data.blocks.splice(i, 1);
+    localStorage.setItem('bioDataPro', JSON.stringify(data));
+    renderBlocks();
+  }
+}
+
+renderBlocks();
+</script>
+
+</body>
+</html>

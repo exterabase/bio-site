@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Моё био</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container" id="content">
+  <h1 id="bio-title">Моё био</h1>
+  <p id="bio-desc">Здесь будут мои ссылки и информация обо мне.</p>
+  <img id="bio-avatar" src="" alt="" style="width:120px;height:120px;border-radius:50%;display:none;margin-bottom:15px;">
+  <div id="blocks"></div>
+</div>
+
+<script>
+let data = JSON.parse(localStorage.getItem('bioDataPro')) || {
+  title: "Моё био",
+  description: "Здесь будут мои ссылки и информация обо мне.",
+  avatar: "",
+  blocks: []
+};
+
+function render() {
+  document.getElementById('bio-title').textContent = data.title;
+  document.getElementById('bio-desc').textContent = data.description;
+
+  const avatar = document.getElementById('bio-avatar');
+  if(data.avatar) {
+    avatar.src = data.avatar;
+    avatar.style.display = 'block';
+  } else {
+    avatar.style.display = 'none';
+  }
+
+  const container = document.getElementById('blocks');
+  container.innerHTML = '';
+
+  data.blocks.forEach(block => {
+    if(block.type === 'text') {
+      const p = document.createElement('p');
+      p.textContent = block.content;
+      container.appendChild(p);
+    } else if(block.type === 'link') {
+      const a = document.createElement('a');
+      a.href = block.url;
+      a.target = "_blank";
+      a.className = `button ${block.platform || 'default'}`;
+      a.innerHTML = (block.icon || '') + ' ' + block.name;
+      container.appendChild(a);
+    }
+  });
+}
+
+render();
+</script>
+
+</body>
+</html>
