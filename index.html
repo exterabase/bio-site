@@ -3,10 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Lyzos Bio</title>
+    <title>Lyzos Space</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+    <!-- МЕНЮ (БУРГЕР СЛЕВА) -->
+    <div class="nav-bar" id="navBar">
+        <div class="burger-btn" onclick="toggleSidebar()">
+            <div class="burger-line line1"></div>
+            <div class="burger-line line2"></div>
+            <div class="burger-line line3"></div>
+        </div>
+    </div>
+
+    <!-- БОКОВАЯ ПАНЕЛЬ -->
+    <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+    <div class="sidebar" id="sidebar">
+        <div class="header" style="margin-bottom: 40px;">
+            <img src="https://i.ibb.co/67hY1kGZ/lv-0-20260118182643.jpg" style="width: 70px; height: 70px; border-radius: 50%; margin-bottom: 12px; border: 2px solid var(--primary);">
+            <h2 style="font-size: 20px;">Lyzos</h2>
+        </div>
+        
+        <div class="menu-item active-link" onclick="switchSection('home')">
+            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            Главная
+        </div>
+        
+        <div class="menu-item" onclick="switchSection('anime')">
+            <svg viewBox="0 0 24 24"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>
+            Anime List
+        </div>
+    </div>
 
     <!-- ЭКРАН ВХОДА -->
     <div id="splash">
@@ -16,92 +44,109 @@
         </button>
     </div>
 
-    <!-- КОНТЕНТ -->
+    <!-- ОСНОВНОЙ КОНТЕЙНЕР -->
     <div class="container" id="main">
         
-        <!-- Шапка -->
-        <div class="header">
-            <img src="https://i.ibb.co/67hY1kGZ/lv-0-20260118182643.jpg" class="avatar">
-            <h1>Lyzos</h1>
-            <div class="bio-wrapper">
-                <p class="bio-text">Welcome to my space</p>
+        <!-- === СЕКЦИЯ ГЛАВНАЯ === -->
+        <div id="home-section" class="section active-section">
+            <!-- Шапка -->
+            <div class="header animate-in delay-1">
+                <img src="https://i.ibb.co/67hY1kGZ/lv-0-20260118182643.jpg" class="avatar">
+                <h1>Lyzos</h1>
+                <div class="bio-wrapper">
+                    <p class="bio-text">Welcome to my space</p>
+                </div>
+            </div>
+
+            <!-- Видео -->
+            <div class="video-container animate-in delay-2" id="video-wrapper">
+                <video id="bg-video" playsinline>
+                    <source src="https://raw.githubusercontent.com/Blackcatonwite/MediaUPLoader/main/MediaUPL/9a374d52e8ae6326.mp4" type="video/mp4">
+                </video>
+            </div>
+
+            <!-- Плеер -->
+            <div class="player animate-in delay-3" id="player-ui">
+                <img id="track-cover" src="" class="player-cover">
+                <div class="track-info">
+                    <div id="track-title" class="track-title">Loading...</div>
+                    <div id="track-artist" class="track-artist">Select music</div>
+                </div>
+                <div class="controls">
+                    <button class="ctrl-btn play-btn-main" onclick="toggleMusic()">
+                        <svg id="play-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        <svg id="pause-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                    </button>
+                    <button class="ctrl-btn" onclick="nextTrack()">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Ссылки -->
+            <div class="links-list animate-in delay-4" id="links-list">
+                <!-- Ссылки JS -->
             </div>
         </div>
 
-        <!-- Видео -->
-        <div class="video-container" id="video-wrapper">
-            <video id="bg-video" playsinline>
-                <source src="https://raw.githubusercontent.com/Blackcatonwite/MediaUPLoader/main/MediaUPL/9a374d52e8ae6326.mp4" type="video/mp4">
-            </video>
-        </div>
-
-        <!-- Музыкальный плеер -->
-        <div class="player" id="player-ui">
-            <img id="track-cover" src="" class="player-cover">
-            <div class="track-info">
-                <div id="track-title" class="track-title">...</div>
-                <div id="track-artist" class="track-artist">...</div>
+        <!-- === СЕКЦИЯ АНИМЕ === -->
+        <div id="anime-section" class="section">
+            <div class="header animate-in delay-1">
+                <h1>Anime Collection</h1>
+                <p class="bio-text" style="color:var(--secondary)">My personal list</p>
             </div>
-            <div class="controls">
-                <button class="ctrl-btn play-btn-main" onclick="toggleMusic()">
-                    <svg id="play-icon" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                    <svg id="pause-icon" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-                </button>
-                <button class="ctrl-btn" onclick="nextTrack()">
-                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
-                </button>
-            </div>
-        </div>
 
-        <!-- Ссылки -->
-        <div class="links-list" id="links-list"></div>
+            <div class="section-title animate-in delay-2">
+                <svg width="16" height="16" fill="var(--primary)" viewBox="0 0 24 24"><path d="M12 7.13l.97 2.29.47 1.11 1.2.1 2.47.21-1.88 1.63-.91.79.27 1.18.56 2.41-2.12-1.28-1.03-.64-1.03.64-2.12 1.28.56-2.41.27-1.18-.91-.79-1.88-1.63 2.47-.21 1.2-.1.47-1.11.97-2.29M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z"/></svg>
+                TOP 3 FAVORITES
+            </div>
+            <div id="top3-list" class="links-list animate-in delay-3"></div>
+
+            <div class="section-title animate-in delay-4">
+                <svg width="16" height="16" fill="var(--secondary)" viewBox="0 0 24 24"><path d="M14 10H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V12c0-1.1-.9-2-2-2zm0 12H4v-10h10v10zm2-16H8c-1.1 0-2 .9-2 2h12v12c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm4 4h-2v12c0 1.1-.9 2-2 2h12c1.1 0 2-.9 2-2V12c0-1.1-.9-2-2-2z"/></svg>
+                WATCH LIST
+            </div>
+            <div id="anime-full-list" class="links-list animate-in delay-5"></div>
+        </div>
 
     </div>
 
     <script>
         // === ДАННЫЕ ===
+        
         const LINKS = [
-            { 
-                title: "Telegram", 
-                url: "https://t.me/lyzos", 
-                icon: '<path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.139-5.062 3.345-.479.329-.913.489-1.302.481-.428-.008-1.252-.241-1.865-.44-.752-.244-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635.099-.002.321.023.465.14.121.098.155.23.171.324.016.094.036.308.02.476z"/>' 
-            },
-            { 
-                title: "Discord", 
-                url: "https://discord.com/users/cheatmacros", 
-                icon: '<path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.085 2.176 2.419 0 1.334-.956 2.419-2.176 2.419zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.085 2.176 2.419 0 1.334-.946 2.419-2.176 2.419z"/>' 
-            },
-            { 
-                title: "TikTok", 
-                url: "https://www.tiktok.com/@d.z.h.c.t?_r=1&_t=ZS-93pQc3LxdK9", 
-                icon: '<path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>' 
-            },
-            { 
-                title: "Steam", 
-                url: "https://steamcommunity.com/profiles/76561198755326845/", 
-                icon: '<path d="M11.98 1C5.69 1 .51 5.86.02 12.04l6.43 2.66c.55-.37 1.2-.59 1.91-.59.07 0 .13.01.19.01l4.28-6.21C12.64 7.84 12.32 7.8 11.98 7.8c-2.61 0-4.74 2.12-4.74 4.74 0 1.17.42 2.24 1.13 3.05l-.27.38-6.84-2.82C1.59 18.9 6.27 23 11.98 23c6.63 0 12-5.37 12-12S18.61 1 11.98 1zm-4.75 12.91c-.39.02-.78.11-1.15.26l-.25.11 2.68 1.1c.07-.46.26-.9.53-1.26l-1.81-1.48zm2.14 3.74c-1.31 1.31-3.42 1.33-4.76.04-1.33-1.29-1.35-3.38-.04-4.69l2.88 1.19c.13.75.56 1.42 1.19 1.88l.73 1.58z"/>' 
-            }
+            { title: "Telegram", url: "https://t.me/lyzos", icon: '<path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.139-5.062 3.345-.479.329-.913.489-1.302.481-.428-.008-1.252-.241-1.865-.44-.752-.244-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635.099-.002.321.023.465.14.121.098.155.23.171.324.016.094.036.308.02.476z"/>' },
+            { title: "Discord", url: "https://discord.com/users/cheatmacros", icon: '<path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.085 2.176 2.419 0 1.334-.956 2.419-2.176 2.419zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.085 2.176 2.419 0 1.334-.946 2.419-2.176 2.419z"/>' },
+            { title: "TikTok", url: "https://www.tiktok.com/@d.z.h.c.t?_r=1&_t=ZS-93pQc3LxdK9", icon: '<path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>' },
+            { title: "Steam", url: "https://steamcommunity.com/profiles/76561198755326845/", icon: '<path d="M11.98 1C5.69 1 .51 5.86.02 12.04l6.43 2.66c.55-.37 1.2-.59 1.91-.59.07 0 .13.01.19.01l4.28-6.21C12.64 7.84 12.32 7.8 11.98 7.8c-2.61 0-4.74 2.12-4.74 4.74 0 1.17.42 2.24 1.13 3.05l-.27.38-6.84-2.82C1.59 18.9 6.27 23 11.98 23c6.63 0 12-5.37 12-12S18.61 1 11.98 1zm-4.75 12.91c-.39.02-.78.11-1.15.26l-.25.11 2.68 1.1c.07-.46.26-.9.53-1.26l-1.81-1.48zm2.14 3.74c-1.31 1.31-3.42 1.33-4.76.04-1.33-1.29-1.35-3.38-.04-4.69l2.88 1.19c.13.75.56 1.42 1.19 1.88l.73 1.58z"/>' }
         ];
 
         const PLAYLIST = [
-            {
-                title: "Юра Юра",
-                artist: "CUPSIZE",
-                url: "https://sefon.pro/api/mp3_download/direct/1853726/3vUCAFbjvI79EfjR5mPkbY3lT5ANVKvqnh9KQPw3vyDZp9XJsmsd8u8VSgJyMm_SxCagZsbi_DhWlCpgLRGjF_ckvL7nVcwcr2QtZV3SOBbPR016sseaxi_HK5ci6KtCq_A_cHXA9rqnyqmNRXmjP9HmjBvKZ_FAwlpflsMB/",
-                cover: "https://i1.sndcdn.com/artworks-0DxCccgWqI4m48tz-zsnzYg-t500x500.png"
-            },
-            {
-                title: "Мальчик Кис Кис",
-                artist: "Lyzos's Choice",
-                url: "https://sefon.pro/api/mp3_download/direct/574226/3vUCAF5F1ib8kcqc_JYAGuMJxU3OW4__P6Qp0OsvflnExcaivO2J-6z-Ol15LC_jMlKwWQYw1Ee7O2c9XiKRCXUPqLYMEuBGDF0_Spza54I1zDbRI9tlwXP3t60E22qw0ffiJnGiew9INeFV88o97sE1KZkBFlL5lHiEvhI/",
-                cover: "https://i1.sndcdn.com/artworks-000597047234-u78eo2-t500x500.jpg"
-            }
+            { title: "Юра Юра", artist: "CUPSIZE", url: "https://sefon.pro/api/mp3_download/direct/1853726/3vUCAFbjvI79EfjR5mPkbY3lT5ANVKvqnh9KQPw3vyDZp9XJsmsd8u8VSgJyMm_SxCagZsbi_DhWlCpgLRGjF_ckvL7nVcwcr2QtZV3SOBbPR016sseaxi_HK5ci6KtCq_A_cHXA9rqnyqmNRXmjP9HmjBvKZ_FAwlpflsMB/", cover: "https://i1.sndcdn.com/artworks-0DxCccgWqI4m48tz-zsnzYg-t500x500.png" },
+            { title: "Мальчик Кис Кис", artist: "Lyzos's Choice", url: "https://sefon.pro/api/mp3_download/direct/574226/3vUCAF5F1ib8kcqc_JYAGuMJxU3OW4__P6Qp0OsvflnExcaivO2J-6z-Ol15LC_jMlKwWQYw1Ee7O2c9XiKRCXUPqLYMEuBGDF0_Spza54I1zDbRI9tlwXP3t60E22qw0ffiJnGiew9INeFV88o97sE1KZkBFlL5lHiEvhI/", cover: "https://i1.sndcdn.com/artworks-000597047234-u78eo2-t500x500.jpg" }
         ];
 
-        // === ИНИЦИАЛИЗАЦИЯ (ФИКС БАГОВ) ===
+        // Иконки SVG для аниме
+        const CROWN_ICON = '<svg class="anime-icon" viewBox="0 0 24 24"><path d="M3 17h18v2H3zm16-5l1 5H4l1-5 4 2 2-6 3 6z"/></svg>';
+        const FILM_ICON = '<svg class="anime-icon" viewBox="0 0 24 24"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>';
+
+        const ANIME_TOP = [
+            { name: "Code Geass", status: "Watched" },
+            { name: "Seven Deadly Sins", status: "Watched" },
+            { name: "Tokyo Ghoul", status: "Watched" }
+        ];
+
+        const ANIME_LIST = [
+            { name: "Akame ga Kill", status: "Watched" },
+            { name: "Tokyo Ghoul", status: "Watched" },
+            { name: "Seven Deadly Sins", status: "Watched" },
+            { name: "Naruto", status: "Watched" },
+            { name: "Boruto", status: "Watching" }
+        ];
+
         document.addEventListener("DOMContentLoaded", () => {
             
-            // Генерация ссылок
+            // --- РЕНДЕР ССЫЛОК ---
             const linksContainer = document.getElementById('links-list');
             LINKS.forEach(link => {
                 linksContainer.innerHTML += `
@@ -113,43 +158,107 @@
                 `;
             });
 
-            // Элементы
+            // --- РЕНДЕР АНИМЕ ---
+            const renderAnime = (list, containerId, isTop = false) => {
+                const container = document.getElementById(containerId);
+                container.innerHTML = ''; // Очистка перед рендером
+                
+                list.forEach(item => {
+                    const statusClass = item.status === "Watching" ? "status-watching" : "status-watched";
+                    const statusText = item.status === "Watching" ? "Смотрю" : "Смотрел";
+                    const iconSvg = isTop ? CROWN_ICON : FILM_ICON;
+                    
+                    container.innerHTML += `
+                        <div class="link-card" style="margin-bottom:8px">
+                            ${iconSvg}
+                            <span class="link-title">${item.name}</span>
+                            <span class="status-badge ${statusClass}">${statusText}</span>
+                        </div>
+                    `;
+                });
+            };
+
+            renderAnime(ANIME_TOP, 'top3-list', true);
+            renderAnime(ANIME_LIST, 'anime-full-list');
+
+            // --- ЛОГИКА ВХОДА ---
             const splash = document.getElementById('splash');
             const enterBtn = document.getElementById('enterButton');
             const main = document.getElementById('main');
+            const navBar = document.getElementById('navBar');
             const video = document.getElementById('bg-video');
             const videoWrapper = document.getElementById('video-wrapper');
-            const audio = new Audio();
-            let currentTrackIdx = 0;
 
-            // Логика кнопки "ENTER" (Исправлено)
             enterBtn.addEventListener('click', () => {
                 splash.style.opacity = '0';
                 splash.style.visibility = 'hidden';
                 main.style.display = 'flex';
-                
-                // Запуск видео
+                navBar.style.opacity = '1';
+                navBar.style.pointerEvents = 'all';
                 video.muted = false;
                 video.play().catch(e => console.error("Video play error:", e));
             });
 
-            // Видео логика
-            video.onended = () => {
-                video.pause();
+            // --- ЛОГИКА МЕНЮ ---
+            window.toggleSidebar = () => {
+                document.getElementById('sidebar').classList.add('active');
+                document.getElementById('overlay').classList.add('active');
+                document.getElementById('navBar').classList.add('sidebar-open');
             };
 
-            videoWrapper.onclick = () => {
-                if (!audio.paused) toggleMusic();
-                video.currentTime = 0;
-                video.play();
+            window.closeSidebar = () => {
+                document.getElementById('sidebar').classList.remove('active');
+                document.getElementById('overlay').classList.remove('active');
+                document.getElementById('navBar').classList.remove('sidebar-open');
             };
 
-            // Плеер UI
+            // Переключение с перезапуском анимаций
+            window.switchSection = (sectionName) => {
+                const sections = document.querySelectorAll('.section');
+                const menuItems = document.querySelectorAll('.menu-item');
+                
+                sections.forEach(el => el.classList.remove('active-section'));
+                menuItems.forEach(el => el.classList.remove('active-link'));
+                
+                let targetSection;
+
+                if(sectionName === 'home') {
+                    targetSection = document.getElementById('home-section');
+                    menuItems[0].classList.add('active-link');
+                } else {
+                    targetSection = document.getElementById('anime-section');
+                    menuItems[1].classList.add('active-link');
+                }
+
+                // Перезапуск анимации
+                targetSection.classList.add('active-section');
+                
+                // Трюк для перезапуска CSS анимации
+                const animatedElements = targetSection.querySelectorAll('.animate-in');
+                animatedElements.forEach(el => {
+                    el.style.animation = 'none';
+                    el.offsetHeight; /* trigger reflow */
+                    el.style.animation = null; 
+                });
+
+                closeSidebar();
+            };
+
+            // --- ВИДЕО И МУЗЫКА ---
+            const audio = new Audio();
+            let currentTrackIdx = 0;
             const playIcon = document.getElementById('play-icon');
             const pauseIcon = document.getElementById('pause-icon');
             const coverEl = document.getElementById('track-cover');
             const titleEl = document.getElementById('track-title');
             const artistEl = document.getElementById('track-artist');
+
+            video.onended = () => { video.pause(); };
+            videoWrapper.onclick = () => {
+                if (!audio.paused) toggleMusic();
+                video.currentTime = 0;
+                video.play();
+            };
 
             window.loadTrack = (index) => {
                 const track = PLAYLIST[index];
@@ -180,8 +289,6 @@
             };
 
             audio.onended = nextTrack;
-            
-            // Первая загрузка
             loadTrack(0);
         });
     </script>
