@@ -9,12 +9,6 @@
     --secondary: #9c8c84;       /* Бежевый */
     --outline: #4a3e36;         /* Границы */
     
-    /* Статусы */
-    --status-watching-bg: #dcc6a0;
-    --status-watching-text: #1a1614;
-    --status-watched-bg: #3a302a;
-    --status-watched-text: #9c8c84;
-
     /* Размеры */
     --radius-xl: 24px;
     --radius-full: 999px;
@@ -204,7 +198,7 @@ video { width: 100%; height: 100%; object-fit: cover; display: block; }
 }
 .play-btn-main { background: var(--primary); color: #1a1614; }
 
-/* === LINKS & ANIME === */
+/* === LINKS & SHOP === */
 .links-list { display: flex; flex-direction: column; gap: 10px; }
 
 .link-card {
@@ -218,19 +212,34 @@ video { width: 100%; height: 100%; object-fit: cover; display: block; }
 .link-title { font-weight: 600; font-size: 15px; flex-grow: 1; }
 .arrow-icon { width: 16px; fill: var(--secondary); opacity: 0.5; }
 
-/* Anime Styles */
-.section-title {
-    font-size: 11px; font-weight: 800; color: var(--secondary);
-    text-transform: uppercase; letter-spacing: 2px; margin: 24px 0 12px;
-    display: flex; align-items: center; gap: 12px;
+/* Shop Styles */
+.shop-price {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--secondary);
+    background-color: var(--surface-bright);
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--outline);
 }
-.section-title::before, .section-title::after { content: ''; height: 1px; background: var(--outline); flex: 1; }
 
-.anime-icon { width: 24px; height: 24px; fill: var(--primary); margin-right: 12px; }
-
-.status-badge {
-    font-size: 10px; font-weight: 800; padding: 4px 8px; border-radius: 6px;
-    text-transform: uppercase; letter-spacing: 0.5px;
+.shop-footer {
+    margin-top: 24px;
+    padding: 20px;
+    text-align: center;
+    background: var(--surface);
+    border: 1px solid var(--outline);
+    border-radius: var(--radius-xl);
+    color: var(--secondary);
+    font-size: 14px;
+    line-height: 1.6;
 }
-.status-watching { background: var(--status-watching-bg); color: var(--status-watching-text); }
-.status-watched { background: var(--status-watched-bg); color: var(--status-watched-text); border: 1px solid var(--outline); }
+.shop-footer p { margin: 4px 0; }
+.shop-footer a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+.shop-footer a:hover {
+    text-decoration: underline;
+}

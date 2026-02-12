@@ -30,9 +30,9 @@
             Главная
         </div>
         
-        <div class="menu-item" onclick="switchSection('anime')">
-            <svg viewBox="0 0 24 24"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>
-            Anime List
+        <div class="menu-item" onclick="switchSection('shop')">
+            <svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+            Shop
         </div>
     </div>
 
@@ -89,24 +89,35 @@
             </div>
         </div>
 
-        <!-- === СЕКЦИЯ АНИМЕ === -->
-        <div id="anime-section" class="section">
+        <!-- === СЕКЦИЯ МАГАЗИН === -->
+        <div id="shop-section" class="section">
             <div class="header animate-in delay-1">
-                <h1>Anime Collection</h1>
-                <p class="bio-text" style="color:var(--secondary)">My personal list</p>
+                <h1>SHOP | МАГАЗИН</h1>
             </div>
 
-            <div class="section-title animate-in delay-2">
-                <svg width="16" height="16" fill="var(--primary)" viewBox="0 0 24 24"><path d="M12 7.13l.97 2.29.47 1.11 1.2.1 2.47.21-1.88 1.63-.91.79.27 1.18.56 2.41-2.12-1.28-1.03-.64-1.03.64-2.12 1.28.56-2.41.27-1.18-.91-.79-1.88-1.63 2.47-.21 1.2-.1.47-1.11.97-2.29M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z"/></svg>
-                TOP 3 FAVORITES
+            <div id="shop-list" class="links-list animate-in delay-2">
+                 <a href="https://t.me/lyzos" class="link-card" target="_blank">
+                    <span class="link-title">@lyzos</span>
+                    <span class="shop-price">450 TON ($625)</span>
+                </a>
+                 <a href="https://t.me/xeryo" class="link-card" target="_blank">
+                    <span class="link-title">@xeryo</span>
+                    <span class="shop-price">300 TON ($415)</span>
+                </a>
+                 <a href="https://t.me/x0ery" class="link-card" target="_blank">
+                    <span class="link-title">@x0ery</span>
+                    <span class="shop-price">150 TON ($210)</span>
+                </a>
+                 <a href="https://t.me/k3ryx" class="link-card" target="_blank">
+                    <span class="link-title">@k3ryx</span>
+                    <span class="shop-price">100 TON ($140)</span>
+                </a>
             </div>
-            <div id="top3-list" class="links-list animate-in delay-3"></div>
 
-            <div class="section-title animate-in delay-4">
-                <svg width="16" height="16" fill="var(--secondary)" viewBox="0 0 24 24"><path d="M14 10H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V12c0-1.1-.9-2-2-2zm0 12H4v-10h10v10zm2-16H8c-1.1 0-2 .9-2 2h12v12c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm4 4h-2v12c0 1.1-.9 2-2 2h12c1.1 0 2-.9 2-2V12c0-1.1-.9-2-2-2z"/></svg>
-                WATCH LIST
+            <div class="shop-footer animate-in delay-3">
+                <p><strong>Contact | Связь:</strong> <a href="https://t.me/lyzos" target="_blank">@lyzos</a></p>
+                <p><strong>Deals | Сделка:</strong> P2P / Crypto bot</p>
             </div>
-            <div id="anime-full-list" class="links-list animate-in delay-5"></div>
         </div>
 
     </div>
@@ -122,26 +133,11 @@
         ];
 
         const PLAYLIST = [
+            { title: "Заебался", artist: "Nazlim", url: "https://github.com/Blackcatonwite/rustmap/releases/download/rust/Suleeking.Nazlim.Violenur.-.mp3", cover: "https://i1.sndcdn.com/artworks-M20Ak3a2gI75W5zX-yI0j2Q-t500x500.jpg" },
+            { title: "Миниюбка", artist: "emoslut666", url: "https://github.com/Blackcatonwite/rustmap/releases/download/rust/4_5890720196775132897.mp3", cover: "https://i1.sndcdn.com/artworks-GaKHkZ31VAF3-0-t500x500.jpg" },
+            { title: "Нумеро Уно", artist: "Птицу ЕМЪ", url: "https://github.com/Blackcatonwite/rustmap/releases/download/rust/4_5967757002233879903.mp3", cover: "https://images.genius.com/023165b5936d05f3d5362d2a45a64388.1000x1000x1.jpg" },
             { title: "Юра Юра", artist: "CUPSIZE", url: "https://sefon.pro/api/mp3_download/direct/1853726/3vUCAFbjvI79EfjR5mPkbY3lT5ANVKvqnh9KQPw3vyDZp9XJsmsd8u8VSgJyMm_SxCagZsbi_DhWlCpgLRGjF_ckvL7nVcwcr2QtZV3SOBbPR016sseaxi_HK5ci6KtCq_A_cHXA9rqnyqmNRXmjP9HmjBvKZ_FAwlpflsMB/", cover: "https://i1.sndcdn.com/artworks-0DxCccgWqI4m48tz-zsnzYg-t500x500.png" },
             { title: "Мальчик Кис Кис", artist: "Lyzos's Choice", url: "https://sefon.pro/api/mp3_download/direct/574226/3vUCAF5F1ib8kcqc_JYAGuMJxU3OW4__P6Qp0OsvflnExcaivO2J-6z-Ol15LC_jMlKwWQYw1Ee7O2c9XiKRCXUPqLYMEuBGDF0_Spza54I1zDbRI9tlwXP3t60E22qw0ffiJnGiew9INeFV88o97sE1KZkBFlL5lHiEvhI/", cover: "https://i1.sndcdn.com/artworks-000597047234-u78eo2-t500x500.jpg" }
-        ];
-
-        // Иконки SVG для аниме
-        const CROWN_ICON = '<svg class="anime-icon" viewBox="0 0 24 24"><path d="M3 17h18v2H3zm16-5l1 5H4l1-5 4 2 2-6 3 6z"/></svg>';
-        const FILM_ICON = '<svg class="anime-icon" viewBox="0 0 24 24"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>';
-
-        const ANIME_TOP = [
-            { name: "Code Geass", status: "Watched" },
-            { name: "Seven Deadly Sins", status: "Watched" },
-            { name: "Tokyo Ghoul", status: "Watched" }
-        ];
-
-        const ANIME_LIST = [
-            { name: "Akame ga Kill", status: "Watched" },
-            { name: "Tokyo Ghoul", status: "Watched" },
-            { name: "Seven Deadly Sins", status: "Watched" },
-            { name: "Naruto", status: "Watched" },
-            { name: "Boruto", status: "Watching" }
         ];
 
         document.addEventListener("DOMContentLoaded", () => {
@@ -157,29 +153,6 @@
                     </a>
                 `;
             });
-
-            // --- РЕНДЕР АНИМЕ ---
-            const renderAnime = (list, containerId, isTop = false) => {
-                const container = document.getElementById(containerId);
-                container.innerHTML = ''; // Очистка перед рендером
-                
-                list.forEach(item => {
-                    const statusClass = item.status === "Watching" ? "status-watching" : "status-watched";
-                    const statusText = item.status === "Watching" ? "Смотрю" : "Смотрел";
-                    const iconSvg = isTop ? CROWN_ICON : FILM_ICON;
-                    
-                    container.innerHTML += `
-                        <div class="link-card" style="margin-bottom:8px">
-                            ${iconSvg}
-                            <span class="link-title">${item.name}</span>
-                            <span class="status-badge ${statusClass}">${statusText}</span>
-                        </div>
-                    `;
-                });
-            };
-
-            renderAnime(ANIME_TOP, 'top3-list', true);
-            renderAnime(ANIME_LIST, 'anime-full-list');
 
             // --- ЛОГИКА ВХОДА ---
             const splash = document.getElementById('splash');
@@ -225,8 +198,8 @@
                 if(sectionName === 'home') {
                     targetSection = document.getElementById('home-section');
                     menuItems[0].classList.add('active-link');
-                } else {
-                    targetSection = document.getElementById('anime-section');
+                } else { // shop
+                    targetSection = document.getElementById('shop-section');
                     menuItems[1].classList.add('active-link');
                 }
 
@@ -287,6 +260,8 @@
                 loadTrack(currentTrackIdx);
                 if (wasPlaying) audio.play();
             };
+
+
 
             audio.onended = nextTrack;
             loadTrack(0);
